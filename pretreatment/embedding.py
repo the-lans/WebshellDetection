@@ -17,8 +17,8 @@ class Embeding:
 
         # 如果开启了 padding 则 将第一个个词(编号0)设为一个无用的 padding_word, 相当于
         # 正常词的编号变为原编号 + 1
-        word_index = ['padding_word'] + model.wv.index_to_key if enable_padding else model.wv.index_to_key
-        # word_index = ['padding_word'] + model.wv.index2entity if enable_padding else model.wv.index2entity
+        #word_index = ['padding_word'] + model.wv.index_to_key if enable_padding else model.wv.index_to_key  # gensim>4.0
+        word_index = ['padding_word'] + model.wv.index2entity if enable_padding else model.wv.index2entity  # gensim<=3.8.3
 
         self._num_word = feture_vectors.shape[0]
         self._word_index = {word: index for index,
