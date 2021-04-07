@@ -32,7 +32,7 @@ from keras.losses import binary_crossentropy
 from keras.layers import Lambda
 from keras import backend
 import time
-start = time.clock()
+start = time.process_time()
 print("start======================>"+str(start))
 
 class LossHistory(keras.callbacks.Callback):
@@ -59,7 +59,6 @@ def get_data():
         yield [data["vector"], np.squeeze(data["label"], axis=1)]
 
 
-
 class AttLayer(Layer):
     def __init__(self, attention_dim, **kwargs):
         self.init = initializers.get('normal')
@@ -72,7 +71,7 @@ class AttLayer(Layer):
         self.W = K.variable(self.init((input_shape[-1], self.attention_dim)))
         self.b = K.variable(self.init((self.attention_dim,)))
         self.u = K.variable(self.init((self.attention_dim, 1)))
-        self.trainable_weights = [self.W, self.b, self.u]
+        self._trainable_weights = [self.W, self.b, self.u]
         super(AttLayer, self).build(input_shape)
 
     def compute_mask(self, inputs, mask=None):
@@ -138,7 +137,6 @@ if __name__ == "__main__":
     '''
 
     preds1 = Dense(1, activation='sigmoid')(review_encoder)
-    print(preds1)
     #print(preds1)
     preds1 = Lambda(lambda x: backend.squeeze(x, axis=-1))(preds1) # shape=[batch_size, m] 将下标为axis的一维从张量中移除
     #print(preds1)
@@ -148,10 +146,8 @@ if __name__ == "__main__":
     #print(gate_out)
     preds = Dense(1, activation='sigmoid')(gate_out)
     #print(preds)
-
-
     model = Model(review_input, preds)
-
+   
     model.compile(loss=binary_crossentropy,
                   optimizer='rmsprop',
                   metrics=['acc'])
@@ -160,13 +156,14 @@ if __name__ == "__main__":
     '''model.fit(data_generator(), validation_data=load_files(batch_size,path1),
               nb_epoch=10, batch_size=50)
               '''
-    model.fit_generator(data_generator(), epochs=20, steps_per_epoch=manager("train").document.num_batches,callbacks=[history])
+
+    model.fit_generator(data_generator(), epochs=20, steps_per_epoch=manager("train").document.num_batches, callbacks=[history])
     #model.save('one_attention_mode190429_danx.h5')
     with open("history0626.pkl", "wb") as f:
         pickle.dump(history.losses, f)
 
     model.save('one_attention_mode190626_dan.h5')
-    end = time.clock()
+    end = time.process_time()
     print(str(end - start))
 
     """

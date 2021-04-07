@@ -37,18 +37,18 @@ def spliter(code):
     return [w for w in split_re.split(code) if w and w != " "]
 
 
-@line_parser(name="vector", max_length=20)
+@line_parser(name="vector", max_length=250)
 def word_vector(resource, embedding):
-    max_sentence = 400
+    max_sentence = 10
     matrix = []
     for line in resource[0]:
-        word_ids = [embedding.get_index(c) for c in spliter(line)[0:20]]
-        pad_vector = pad_array(np.array(word_ids), 20, embedding.padding_word)
+        word_ids = [embedding.get_index(c) for c in spliter(line)[0:250]]
+        pad_vector = pad_array(np.array(word_ids), 250, embedding.padding_word)
         matrix.append(pad_vector)
         if len(matrix) == max_sentence:
             break
-    for _ in range(400 - len(matrix)):
-        matrix.append(np.ones(20) * embedding.padding_word)
+    for _ in range(10 - len(matrix)):
+        matrix.append(np.ones(250) * embedding.padding_word)
     #print(np.array(matrix).shape)
     #print(matrix)
     return np.array(matrix)

@@ -30,10 +30,10 @@ def get_filename():
     return filename
 
 if __name__ == "__main__":
-    start = time.clock()
+    start = time.process_time()
     #model = keras.models.load_model('two_attention_mode190317.h5', custom_objects={"AttLayer": AttLayer})    #two_attention
     model = keras.models.load_model('one_attention_mode190427_danx.h5', custom_objects={"AttLayer": AttLayer, "backend": backend}) #one_attention
-   # model =keras.models.load_model('rnn_mode190427_10.h5',custom_objects={"AttLayer": AttLayer, "backend": backend})
+    #model =keras.models.load_model('rnn_mode190427_10.h5',custom_objects={"AttLayer": AttLayer, "backend": backend})
     score = model.predict_generator(get_data(), steps=manager("test").document.num_batches)
     #score2 = model2.predict_generator(get_data(), steps=manager("test").document.num_batches)
     rate = [score[i][0] for i in range(len(score))]
@@ -53,5 +53,5 @@ if __name__ == "__main__":
     print('F1-score: %.4f' % metrics.f1_score(y_test,y_pred))
     print('Precesion: %.4f' % metrics.precision_score(y_test,y_pred))
     metrics.confusion_matrix(y_test,y_pred)
-    end = time.clock()
+    end = time.process_time()
     print(str(end - start))

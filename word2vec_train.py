@@ -16,7 +16,7 @@ class Sentences():
         file_list = os.listdir(self.path)
         for file_index in file_list:
             a = []
-            for line in open('F:\Lee\论文\我的项目\CNN_word2wec_sentence\word_train/' + str(file_index), 'rb'):
+            for line in open('./word_train/' + str(file_index), 'rb'):
                 line = re.sub(r'[^\x00-\x7F]+',' ', str(line))
                 # char = ['\t', '\n', '\\t', '\\n', '<?php', '?>', ';', '<html', '</html>', '<body', '</body>', '>',
                 #         '<head', '</head>', '<meta', '/>', '<title', '</title>', '<style>', '</style>', '<script',
@@ -29,11 +29,9 @@ class Sentences():
             yield a
 
 
-
 #训练词向量模型
-path = "F:\Lee\论文\我的项目\CNN_word2wec_sentence\word_train/"
+path = "./word_train/"
 sentences = Sentences(path)
-word_model = Word2Vec(sentences,size=128,window=10,min_count=5)
+word_model = Word2Vec(sentences, size=128, window=10, min_count=5)
 output = "word_train190313.model"
 word_model.save(output)
-

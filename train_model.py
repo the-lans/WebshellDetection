@@ -17,7 +17,7 @@ import numpy as np
 
 #from keras.layers import Embedding
 from keras.layers import Dense, Input, Flatten
-from keras.layers import Conv1D, MaxPooling1D, Embedding, merge, Dropout, LSTM, GRU, Bidirectional, TimeDistributed
+from keras.layers import Conv1D, MaxPooling1D, Embedding,  Dropout, LSTM, GRU, Bidirectional, TimeDistributed
 from keras.models import Model
 #from nltk import tokenize
 from keras import backend as K
@@ -53,7 +53,7 @@ class AttLayer(Layer):
         self.W = K.variable(self.init((input_shape[-1], self.attention_dim)))
         self.b = K.variable(self.init((self.attention_dim,)))
         self.u = K.variable(self.init((self.attention_dim, 1)))
-        self.trainable_weights = [self.W, self.b, self.u]
+        self._trainable_weights = [self.W, self.b, self.u]
         super(AttLayer, self).build(input_shape)
 
     def compute_mask(self, inputs, mask=None):
@@ -97,17 +97,20 @@ class AttLayer(Layer):
 '''
 
 if __name__ == "__main__":
+    #initial_builing = True # to autoname the layers I think
     sentence_input_ids = Input(shape=(250, ), dtype='int32')
     sentence_input_vectors = train_context.embedding.keras_embedding_layer(sentence_input_ids)
     l_lstm = Bidirectional(GRU(100, return_sequences=True))(sentence_input_vectors)
-    l_att = AttLayer(100)(l_lstm)
+    #l_att = AttLayer(100)(l_lstm)
+    # generating random layer names to avo
+    l_att = AttLayer(100, name = '1')(l_lstm)
     sentEncoder = Model(sentence_input_ids, l_att)
 
     review_input = Input(shape=(10, 250), dtype='int32')
     review_encoder = TimeDistributed(sentEncoder)(review_input)
 
     l_lstm_sent = Bidirectional(GRU(100, return_sequences=True))(review_encoder)
-    l_att_sent = AttLayer(100)(l_lstm_sent)
+    l_att_sent = AttLayer(100, name = '2')(l_lstm_sent)
     preds = Dense(1, activation='sigmoid')(l_att_sent)
     model = Model(review_input, preds)
 
@@ -121,6 +124,7 @@ if __name__ == "__main__":
               '''
     model.fit_generator(data_generator(), epochs=6, steps_per_epoch=manager("train").document.num_batches)
     #score = model.evaluate_generator(get_data(), steps=int(3577 / manager("train").document.num_batches))
+    #model.save('two_attention_mode190317.h5', include_optimizer=False) # turn off optimizer
     model.save('two_attention_mode190317.h5')
 
     """
