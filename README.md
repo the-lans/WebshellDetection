@@ -1,5 +1,7 @@
-# WebshellDetection
+# Webshell Detection
 Webshell Detection Based on the Word Attention Mechanism
+
+Read [this article](https://github.com/the-lans/WebshellDetection/blob/main/Webshell%20Detection%20Based%20on%20the%20Word%20Attention%20Mechanism.pdf)
 
 Cloned from https://github.com/leett1/Programe/
 

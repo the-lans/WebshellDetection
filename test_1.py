@@ -31,8 +31,9 @@ def get_filename():
 
 if __name__ == "__main__":
     start = time.process_time()
-    #model = keras.models.load_model('two_attention_mode190317.h5', custom_objects={"AttLayer": AttLayer})    #two_attention
-    model = keras.models.load_model('one_attention_mode190427_danx.h5', custom_objects={"AttLayer": AttLayer, "backend": backend}) #one_attention
+    model = keras.models.load_model('two_attention_mode190317.h5', custom_objects={"AttLayer": AttLayer})    #two_attention
+    #model = keras.models.load_model('one_attention_mode190427_danx.h5', custom_objects={"AttLayer": AttLayer, "backend": backend}) #one_attention
+    #model = keras.models.load_model('one_attention_mode190626_dan.h5', custom_objects={"AttLayer": AttLayer, "backend": backend})  # one_attention
     #model =keras.models.load_model('rnn_mode190427_10.h5',custom_objects={"AttLayer": AttLayer, "backend": backend})
     score = model.predict_generator(get_data(), steps=manager("test").document.num_batches)
     #score2 = model2.predict_generator(get_data(), steps=manager("test").document.num_batches)
@@ -47,11 +48,11 @@ if __name__ == "__main__":
     print(tmp1)
     print(y_pred)
     from sklearn import metrics
-    print('AUC: %.4f' % metrics.roc_auc_score(y_test,y_pred))
-    print('ACC: %.4f' % metrics.accuracy_score(y_test,y_pred))
-    print('Recall: %.4f' % metrics.recall_score(y_test,y_pred))
-    print('F1-score: %.4f' % metrics.f1_score(y_test,y_pred))
-    print('Precesion: %.4f' % metrics.precision_score(y_test,y_pred))
+    #print('AUC: %.4f' % metrics.roc_auc_score(y_test, y_pred))
+    print('ACC: %.4f' % metrics.accuracy_score(y_test, y_pred))
+    print('Recall: %.4f' % metrics.recall_score(y_test, y_pred))
+    print('F1-score: %.4f' % metrics.f1_score(y_test, y_pred))
+    print('Precesion: %.4f' % metrics.precision_score(y_test, y_pred))
     metrics.confusion_matrix(y_test,y_pred)
     end = time.process_time()
-    print(str(end - start))
+    print("timer:", str(end - start))
