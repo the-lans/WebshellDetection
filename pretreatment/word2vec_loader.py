@@ -16,7 +16,7 @@ class Sentences:
                     
 def gen_word2vec_model(spliter,save_file_name,*file_names):
     sentences = Sentences(spliter,*file_names)
-    model = Word2Vec(sentences,size=150,min_count=20)
+    model = Word2Vec(sentences, size=150, min_count=20)
     tool.ensure_dir_exist(save_file_name)
     model.save(save_file_name)
 
@@ -25,5 +25,3 @@ def load_word2vec_model(file_name):
 
 if __name__ == "__main__":
     pass
-    
-
