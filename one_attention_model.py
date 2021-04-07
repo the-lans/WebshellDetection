@@ -125,9 +125,7 @@ if __name__ == "__main__":
     #print(l_att)
     sentEncoder = Model(sentence_input_ids, l_att)
 
-    review_input = Input(shape=(200, 50), dtype='int32')
-
-
+    review_input = Input(shape=(10, 250), dtype='int32')
     review_encoder = TimeDistributed(sentEncoder)(review_input)
 
     '''
